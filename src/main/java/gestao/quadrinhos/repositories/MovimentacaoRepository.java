@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -12,10 +13,14 @@ import gestao.quadrinhos.entities.Movimentacao;
 import gestao.quadrinhos.entities.Quadrinho;
 import gestao.quadrinhos.entities.StatusMovimentacao;
 import gestao.quadrinhos.entities.User;
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long> {
-
+	@Modifying
+	@Transactional
+	void deleteAllByQuadrinho(Quadrinho quadrinho);
+	
     List<Movimentacao> findByUser(User user);
 
     List<Movimentacao> findByUserAndQuadrinho(User user, Quadrinho quadrinho);
@@ -40,4 +45,5 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long
       ORDER BY m.dataMovimentacao DESC
         """)
     List<Movimentacao> findByInventarioId(@Param("inventarioId") Long inventarioId);
+
 }
