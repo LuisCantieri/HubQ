@@ -13,7 +13,7 @@ public class CorsConfig {
         CorsConfiguration cfg = new CorsConfiguration();
         cfg.setAllowCredentials(true);
         // sua origem React
-        cfg.addAllowedOrigin("http://localhost:5173");
+        cfg.addAllowedOrigin("https://hub-q.vercel.app");
         // todos os métodos, incluindo OPTIONS
         cfg.addAllowedMethod("*");
         // todos os headers de request

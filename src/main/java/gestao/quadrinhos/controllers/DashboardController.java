@@ -13,7 +13,7 @@ import gestao.quadrinhos.dto.MovimentacaoDTO;
 import gestao.quadrinhos.services.InventarioService;
 import gestao.quadrinhos.services.MovimentacaoService;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://hub-q.vercel.app")
 @RestController
 @RequestMapping("/api/dashboard")
 public class DashboardController {

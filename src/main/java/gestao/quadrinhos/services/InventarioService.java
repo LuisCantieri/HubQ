@@ -68,16 +68,37 @@ public class InventarioService {
         User user = getCurrentUser();
         Quadrinho q = quadrinhoRepository.findById(dto.getQuadrinhoId())
             .orElseThrow(() -> new EntityNotFoundException("Quadrinho não encontrado"));
-        Inventario inv = inventarioRepository.findByUserAndQuadrinho(user, q)
-            .orElseGet(() -> new Inventario(user, q, dto.getQuantidade(),
-                dto.getPrecoUnitario() != null ? dto.getPrecoUnitario() : q.getPreco()));
-        inv.setQuantidade(inv.getQuantidade() + dto.getQuantidade());
-        if (dto.getPrecoUnitario() != null) inv.setPrecoUnitario(dto.getPrecoUnitario());
+
+        Inventario inv = inventarioRepository
+            .findByUserAndQuadrinho(user, q)
+            .orElse(null);
+
+        if (inv != null) {
+            // já existia: soma a quantidade nova
+            inv.setQuantidade(inv.getQuantidade() + dto.getQuantidade());
+            if (dto.getPrecoUnitario() != null) {
+                inv.setPrecoUnitario(dto.getPrecoUnitario());
+            }
+        } else {
+            // criado pela primeira vez: quantidade já vem do DTO, sem soma extra
+            BigDecimal preco = dto.getPrecoUnitario() != null
+                ? dto.getPrecoUnitario()
+                : q.getPreco();
+            inv = new Inventario(user, q, dto.getQuantidade(), preco);
+        }
+
         inv.setUpdatedAt(new Date());
         inv = inventarioRepository.save(inv);
+
+        // registra movimentação de entrada
         movimentacaoRepository.save(new Movimentacao(
-            user, q, StatusMovimentacao.ENTRADA, dto.getQuantidade(), dto.getRaridade()
+            user,
+            q,
+            StatusMovimentacao.ENTRADA,
+            dto.getQuantidade(),
+            dto.getRaridade()
         ));
+
         return toDto(inv);
     }
 
@@ -145,7 +166,7 @@ public class InventarioService {
     public void deleteProductFromInventory(Long quadrinhoId) {
         User user = getCurrentUser();
         Quadrinho q = quadrinhoRepository.findById(quadrinhoId)
-            .orElseThrow(() -> new EntityNotFoundException("Quadrinho não encontrado"));
+            .orElseThrow(() -> new EntityNotFoundException("Quadrinho não encontrato"));
         Inventario inv = inventarioRepository.findByUserAndQuadrinho(user, q)
             .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado no inventário"));
         int qty = inv.getQuantidade();

@@ -13,7 +13,7 @@ import gestao.quadrinhos.dto.InventarioResponseDTO;
 import gestao.quadrinhos.services.InventarioService;
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "https://hub-q.vercel.app")
 @RestController
 @RequestMapping("/api/inventory")
 public class InventarioController {

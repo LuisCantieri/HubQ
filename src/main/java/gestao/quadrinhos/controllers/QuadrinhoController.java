@@ -12,7 +12,7 @@ import gestao.quadrinhos.services.QuadrinhoService;
 
 @RestController
 @RequestMapping("/api/quadrinhos")
-@CrossOrigin(origins = "http://localhost:5173",
+@CrossOrigin(origins = "https://hub-q.vercel.app",
              allowedHeaders = {"Authorization","Content-Type"},
              exposedHeaders = "Authorization",
              allowCredentials = "true")

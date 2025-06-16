@@ -14,7 +14,7 @@ import gestao.quadrinhos.services.MovimentacaoService;
 @RestController
 @RequestMapping("/api/movimentacoes")
 @CrossOrigin(
-  origins = "http://localhost:5173",
+  origins = "https://hub-q.vercel.app",
   allowedHeaders = {"Authorization", "Content-Type"},
   exposedHeaders = "Authorization",
   allowCredentials = "true"
